@@ -7,10 +7,10 @@
 	<meta name="description" content="Robots Mobots - Error" />
 </svelte:head>
 
-<div class="w-screen h-screen flex justify-center items-center">
-	<div class="w-full mx-[10%] sm:w-[40%] xl:w-[30%] flex justify-center items-center flex-col">
+<div class="error_container">
+	<div class="error_container1">
 		<img src={PageNotFoundImg} alt="page not found" />
-		<p class="text-2xl sm:text-3xl mt-5 text-center">
+		<p class="paragraphStyle">
 			The page you are searching for is not currently available.
 		</p>
 	</div>
