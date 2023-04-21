@@ -1,20 +1,10 @@
-<!-- <!DOCTYPE html>
-<html> -->
-<head>
-	<link
-		href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css"
-		rel="stylesheet"
-		type="text/css"
-	/>
-	<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<!-- <body class="bg-slate-200"> -->
-<div class="w-screen h-screen flex justify-center items-center p-10 overflow-auto">
+<div
+	class="md:h-screen flex justify-center items-center p-10 overflow-auto py-[20%] md:pt-0 md:pb-0"
+	data-theme="light"
+>
 	<div class="w-full 2xl:w-8/12 mx-auto">
 		<div class="flex flex-col w-full justify-center items-center md:flex-row">
-			<div
-				class="h-[300px] w-[300px] flex justify-center items-center mt-[40%] sm:mt-[10%] md:mt-0"
-			>
+			<div class="w-[200px] md:w-[300px] flex justify-center items-center">
 				<img
 					src="/dummy-image-square.jpg"
 					alt="product"
@@ -23,13 +13,13 @@
 				/>
 			</div>
 			<div class="text-center mx-10 w-full md:w-4/12">
-				<p class="text-lg font-bold my-10 md:mt-0 md:mb-10" id="product-content"></p>
+				<p class="text-lg font-bold my-10 md:mt-0 md:mb-5" id="product-content"></p>
 				<p class="text-lg mb-5" id="description-content"></p>
 				<p class="text-lg mb-5" id="usage-content"></p>
 
 				<div class="flex flex-col justify-center items-center">
 					<div>
-						<a class="btn btn-info mt-3" id="download-user-manual-link" href="#">
+						<a class="btn btn-info btn-sm m-2" id="download-user-manual-link" href="#">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -47,7 +37,7 @@
 							</svg>
 							&nbsp; User manual
 						</a>
-						<a class="btn btn-info mt-3" id="download-schematic-link" href="#">
+						<a class="btn btn-info btn-sm m-2" id="download-schematic-link" href="#">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -68,7 +58,7 @@
 					</div>
 					<div>
 						<a
-							class="btn btn-dark mt-3"
+							class="btn btn-dark btn-sm m-2"
 							href="#"
 							id="tutorial-link"
 							target="_blank"
@@ -88,7 +78,13 @@
 							</svg>
 							&nbsp; Tutorial
 						</a>
-						<a class="btn btn-dark mt-3" href="#" id="github-link" target="_blank" rel="noreferrer">
+						<a
+							class="btn btn-dark btn-sm m-2"
+							href="#"
+							id="github-link"
+							target="_blank"
+							rel="noreferrer"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="16"
@@ -107,7 +103,20 @@
 				</div>
 			</div>
 		</div>
+		<div class="overflow-x-auto mt-10" id="firmware-table">
+			<table class="table w-full">
+				<!-- head -->
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Version</th>
+						<th>Desciption</th>
+						<th>Date</th>
+						<th>Download</th>
+					</tr>
+				</thead>
+				<tbody id="firmware-table-body"></tbody>
+			</table>
+		</div>
 	</div>
 </div>
-<!-- </body>
-</html> -->
