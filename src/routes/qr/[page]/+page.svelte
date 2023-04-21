@@ -33,7 +33,7 @@
 			downloadSchematicLinkElem.href = data.ProductVersion.schamatic;
 			tutorialLinkElem.href = data.ProductVersion.tutorial;
 			githubLinkElem.href = data.ProductVersion.github;
-			// productImageElem.src = data.ProductVersion.picture;
+			productImageElem.src = data.ProductVersion.picture;
 		}
 	});
 </script>
