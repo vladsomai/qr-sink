@@ -1,8 +1,6 @@
 export interface Product {
     Product: string;
     Version: string;
-    SerialNumber: string;
-    Key: string;
 }
 
 export interface ProductRequest {
@@ -26,7 +24,7 @@ export interface ProductVersion {
     web_page_template: string,
     picture: string,
     description: string,
-    schamatic: string,
+    schematic: string,
     user_manual: string,
     tutorial: string,
     github: string,

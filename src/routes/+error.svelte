@@ -10,8 +10,7 @@
 <div class="error_container">
 	<div class="error_container1">
 		<img src={PageNotFoundImg} alt="page not found" />
-		<p class="paragraphStyle">
-			The page you are searching for is not currently available.
-		</p>
+		<p class="paragraphStyle">The page you are searching for is not currently available.</p>
 	</div>
 </div>
+

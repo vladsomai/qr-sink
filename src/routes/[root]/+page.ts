@@ -1,5 +1,7 @@
+export const prerender = false
+
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 import type { ProductVersion, ProductRequest, Product } from '$lib/types';
 import { parse } from 'yaml'
 
@@ -8,12 +10,10 @@ const productDataJSONFile = 'PRODUCT_DATA.json'
 
 function parseQueryString(inputStr: string): Product | null {
     const ProductArr = inputStr.split('_');
-    if (ProductArr.length == 4) {
+    if (ProductArr.length == 2) {
         return {
             Product: ProductArr[0],
             Version: ProductArr[1],
-            SerialNumber: ProductArr[2],
-            Key: ProductArr[3]
         };
     }
     return null;
@@ -22,7 +22,7 @@ function parseQueryString(inputStr: string): Product | null {
 /*
 This method loops over all public repositories and returns a valid JSON object containing all available products
 */
-async function getAllAvailableProducts(allRepos: any[]): Promise<any[]> {
+async function getAllAvailableProducts(allRepos: any[], fetch: Function): Promise<any[]> {
 
     const githubRawHost = 'https://raw.githubusercontent.com/'
     const productDataPath = '/main/' + productDataYAMLFile
@@ -37,7 +37,7 @@ async function getAllAvailableProducts(allRepos: any[]): Promise<any[]> {
             const productDataYAMLText = await reqProductDataJson.text();
             const productDataJson = parse(productDataYAMLText)
             products = [...products, ...productDataJson]
-            console.warn("Success reading YAML from ", repo.full_name)
+            console.log("Success reading YAML from ", repo.full_name)
 
         } catch (error) {
             try {
@@ -46,7 +46,7 @@ async function getAllAvailableProducts(allRepos: any[]): Promise<any[]> {
                 const reqProductDataJson = await fetch(filePath)
                 const productDataJson = await reqProductDataJson.json();
                 products = [...products, ...productDataJson]
-                console.warn("Success reading JSON from ", repo.full_name)
+                console.log("Success reading JSON from ", repo.full_name)
             }
             catch (err) {
                 //we will only catch the error
@@ -63,7 +63,7 @@ async function getAllAvailableProducts(allRepos: any[]): Promise<any[]> {
 /*
 This method will make async fetch requests to read multiple users repos
 */
-async function readAllRepositories(githubUsers: string[]): Promise<any[]> {
+async function readAllRepositories(githubUsers: string[], fetch: Function): Promise<any[]> {
 
     let repos: any[] = [] //a list of all available repositories
 
@@ -82,8 +82,8 @@ async function readAllRepositories(githubUsers: string[]): Promise<any[]> {
     return repos
 }
 
-export const load = (async ({ params }) => {
-    const product = parseQueryString(params.page);
+export const load = (async ({ fetch, params }) => {
+    const product = parseQueryString(params.root);
 
     if (product == null) {
         throw error(404, 'Product does not have a valid query string');
@@ -91,8 +91,9 @@ export const load = (async ({ params }) => {
 
     const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos', 'https://api.github.com/users/vladsomai/repos']
 
-    const repos = await readAllRepositories(githubUserRepos)
-    const productDataJson = await getAllAvailableProducts(repos)
+    const repos = await readAllRepositories(githubUserRepos, fetch)
+    const productDataJson = await getAllAvailableProducts(repos, fetch)
+    // const productDataJson: any = []
 
     let found = false
     let productVersion: ProductVersion = {
@@ -101,7 +102,7 @@ export const load = (async ({ params }) => {
         web_page_template: "",
         picture: "",
         description: "",
-        schamatic: "",
+        schematic: "",
         user_manual: "",
         tutorial: "",
         github: "",
@@ -126,12 +127,12 @@ export const load = (async ({ params }) => {
     if (!found) {
         throw error(404, 'Product not found');
     }
+
     const reqHtmlPage = await fetch(productVersion.web_page_template);
     // const reqHtmlPage = await fetch('http://localhost:5173/default_template.html');
     const htmlPage = await reqHtmlPage.text()
 
     const reply: ProductRequest = { Product: product, ProductVersion: productVersion, HtmlPage: htmlPage }
-
     return reply
 
-}) satisfies PageServerLoad;
+}) satisfies PageLoad;
