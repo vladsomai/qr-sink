@@ -10,7 +10,7 @@ const productDataJSONFile = 'PRODUCT_DATA.json'
 
 function parseQueryString(inputStr: string): Product | null {
     const ProductArr = inputStr.split('_');
-    if (ProductArr.length == 2) {
+    if (ProductArr.length == 2 || ProductArr.length == 4) {
         return {
             Product: ProductArr[0],
             Version: ProductArr[1],
