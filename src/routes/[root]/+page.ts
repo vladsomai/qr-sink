@@ -1,4 +1,6 @@
 export const prerender = false
+export const ssr = false
+export const csr = true
 
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
@@ -33,7 +35,6 @@ async function getAllAvailableProducts(allRepos: any[], fetch: Function): Promis
         try {
             const filePath = githubRawHost + repo.full_name + productDataPath
             const reqProductDataJson = await fetch(filePath)
-
             const productDataYAMLText = await reqProductDataJson.text();
             const productDataJson = parse(productDataYAMLText)
             products = [...products, ...productDataJson]
@@ -51,7 +52,6 @@ async function getAllAvailableProducts(allRepos: any[], fetch: Function): Promis
             catch (err) {
                 //we will only catch the error
             }
-            //we will only catch the error
         }
     })
 
@@ -89,7 +89,7 @@ export const load = (async ({ fetch, params }) => {
         throw error(404, 'Product does not have a valid query string');
     }
 
-    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos', 'https://api.github.com/users/vladsomai/repos']
+    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos']
 
     const repos = await readAllRepositories(githubUserRepos, fetch)
     const productDataJson = await getAllAvailableProducts(repos, fetch)
