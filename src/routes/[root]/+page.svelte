@@ -43,7 +43,7 @@
 		tableBodyElem.appendChild(trElem);
 	}
 
-	let scale = 1.5;
+	let scale = 2.5;
 	let pdfDocument = null;
 	let pageNumber = 1;
 	let currentPage: any = null;
