@@ -50,15 +50,12 @@
 	let canvas: HTMLCanvasElement;
 	let context: CanvasRenderingContext2D | null = null;
 
-	async function preparePdfEngine() {
+	async function preparePdfEngine(url: string) {
 		if (!(data != null && data.Product != null)) return;
 
 		if (data.ProductVersion.schematic == '') return;
 
 		context = canvas.getContext('2d');
-		// If absolute URL from the remote server is provided, configure the CORS
-		// header on that server.
-		const url = data.ProductVersion.schematic;
 
 		// Loaded via <script> tag, create shortcut to access PDF.js exports.
 		const pdfjsLib = window['pdfjs-dist/build/pdf' as any];
@@ -107,14 +104,6 @@
 	onMount(async () => {
 		if (!(data != null && data.Product != null)) return;
 
-		canvas = document.getElementById('pdfCanvas') as HTMLCanvasElement;
-		const zoomInBtn = document.getElementById('zoomInBtn');
-		const zoomOutBtn = document.getElementById('zoomOutBtn');
-		zoomInBtn?.addEventListener('click', handleZoomIn);
-		zoomOutBtn?.addEventListener('click', handleZoomOut);
-
-		preparePdfEngine();
-
 		const productContentElem = document.getElementById('product-content') as HTMLParagraphElement;
 		const descriptionContentElem = document.getElementById(
 			'description-content'
@@ -134,31 +123,66 @@
 
 		productContentElem.innerHTML = data.Product.Product;
 
-		descriptionContentElem.innerHTML = data.ProductVersion.description;
+		if (data.ProductVersion) {
+			if (data.ProductVersion.schematic && data.ProductVersion.schematic.length != 0) {
+				canvas = document.getElementById('pdfCanvas') as HTMLCanvasElement;
+				const zoomInBtn = document.getElementById('zoomInBtn');
+				const zoomOutBtn = document.getElementById('zoomOutBtn');
+				zoomInBtn?.addEventListener('click', handleZoomIn);
+				zoomOutBtn?.addEventListener('click', handleZoomOut);
 
-		usageContentElem.innerHTML = ''; //currently not used
-		downloadUserManualLinkElem.href = data.ProductVersion.user_manual;
-		downloadSchematicLinkElem.href = data.ProductVersion.schematic;
-		tutorialLinkElem.href = data.ProductVersion.tutorial;
-		githubLinkElem.href = data.ProductVersion.github;
-		productImageElem.src = data.ProductVersion.picture;
+				downloadSchematicLinkElem.href = data.ProductVersion.schematic;
+				preparePdfEngine(data.ProductVersion.schematic);
+			} else {
+				const pdfDiv = document.getElementById('pdf-div') as HTMLDivElement;
+				pdfDiv.classList.add('hidden');
+			}
 
-		if (data.ProductVersion.firmwares.length == 0) {
-			const firmwareDiv = document.getElementById('firmware-table') as HTMLDivElement;
-			firmwareDiv.classList.add('hidden');
+			descriptionContentElem.innerHTML = data.ProductVersion.description;
+
+			usageContentElem.innerHTML = ''; //currently not used
+
+			if (data.ProductVersion.user_manual && data.ProductVersion.user_manual.length != 0) {
+				downloadUserManualLinkElem.href = data.ProductVersion.user_manual;
+			} else {
+				downloadUserManualLinkElem.classList.add('hidden');
+			}
+
+			if (data.ProductVersion.tutorial && data.ProductVersion.tutorial.length != 0) {
+				tutorialLinkElem.href = data.ProductVersion.tutorial;
+			} else {
+				tutorialLinkElem.classList.add('hidden');
+			}
+
+			if (data.ProductVersion.github && data.ProductVersion.github.length != 0) {
+				githubLinkElem.href = data.ProductVersion.github;
+			} else {
+				githubLinkElem.classList.add('hidden');
+			}
+
+			if (data.ProductVersion.picture && data.ProductVersion.picture.length != 0) {
+				//set the src for the pic only if it exists, we will show a default picture otherwise
+				productImageElem.src = data.ProductVersion.picture;
+			}
+
+			if (data.ProductVersion.firmwares && data.ProductVersion.firmwares.length != 0) {
+				const firmwareTableBody = document.getElementById('firmware-table-body') as HTMLElement;
+
+				data.ProductVersion.firmwares.map((firmware, index) => {
+					addTableRow(
+						firmwareTableBody,
+						firmware.version,
+						firmware.description,
+						firmware.date,
+						firmware.url,
+						index + 1
+					);
+				});
+			} else {
+				const firmwareTable = document.getElementById('firmware-table') as HTMLElement;
+				firmwareTable.classList.add('hidden');
+			}
 		}
-
-		const firmwareTableBody = document.getElementById('firmware-table-body') as HTMLElement;
-		data.ProductVersion.firmwares.map((firmware, index) => {
-			addTableRow(
-				firmwareTableBody,
-				firmware.version,
-				firmware.description,
-				firmware.date,
-				firmware.url,
-				index + 1
-			);
-		});
 	});
 </script>
 

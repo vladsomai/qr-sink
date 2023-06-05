@@ -115,10 +115,11 @@ export const load = (async ({ fetch, params }) => {
                 if (versionItem.version == product.Version) {
                     found = true
                     productVersion = versionItem
-
-                    versionItem.firmwares.sort(
-                        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-                    )
+                    if (versionItem.firmwares) {
+                        versionItem.firmwares.sort(
+                            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+                        )
+                    }
                 }
             })
         }
@@ -129,7 +130,7 @@ export const load = (async ({ fetch, params }) => {
     }
 
     const reqHtmlPage = await fetch(productVersion.web_page_template);
-    // const reqHtmlPage = await fetch('http://localhost:5173/default_template.html');
+    // const reqHtmlPage = await fetch('http://localhost/default_template.html');
     const htmlPage = await reqHtmlPage.text()
 
     const reply: ProductRequest = { Product: product, ProductVersion: productVersion, HtmlPage: htmlPage }

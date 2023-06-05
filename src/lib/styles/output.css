@@ -1484,13 +1484,8 @@ html {
   margin-bottom: 10%;
 }
 
-.my-\[20\%\] {
-  margin-top: 20%;
-  margin-bottom: 20%;
-}
-
-.mb-10 {
-  margin-bottom: 2.5rem;
+.mb-20 {
+  margin-bottom: 5rem;
 }
 
 .mb-5 {
@@ -1509,10 +1504,6 @@ html {
   margin-right: 2.5rem;
 }
 
-.mb-20 {
-  margin-bottom: 5rem;
-}
-
 .flex {
   display: flex;
 }
@@ -1525,16 +1516,12 @@ html {
   display: none;
 }
 
-.h-\[50vh\] {
-  height: 50vh;
+.h-\[70vh\] {
+  height: 70vh;
 }
 
 .h-auto {
   height: auto;
-}
-
-.h-\[70vh\] {
-  height: 70vh;
 }
 
 .w-52 {
