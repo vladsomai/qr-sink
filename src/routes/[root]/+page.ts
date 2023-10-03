@@ -89,7 +89,7 @@ export const load = (async ({ fetch, params }) => {
         throw error(404, 'Product does not have a valid query string');
     }
 
-    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos', 'https://api.github.com/users/vladsomai/repos']
+    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos']
 
     const repos = await readAllRepositories(githubUserRepos, fetch)
     const productDataJson = await getAllAvailableProducts(repos, fetch)
