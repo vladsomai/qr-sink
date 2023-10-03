@@ -222,16 +222,23 @@
 				siema.next();
 			}, 3000);
 		}
-        createSiemaInterval()
+		createSiemaInterval();
 
 		productImageElem.addEventListener('mouseenter', () => {
 			clearInterval(siemaInterval);
 		});
-        
-		productImageElem.addEventListener('mouseleave', () => {
+
+		productImageElem.addEventListener('touchstart', () => {
+			clearInterval(siemaInterval);
+		});
+
+		productImageElem.addEventListener('touchend', () => {
 			createSiemaInterval();
 		});
 
+		productImageElem.addEventListener('mouseleave', () => {
+			createSiemaInterval();
+		});
 	});
 </script>
 
