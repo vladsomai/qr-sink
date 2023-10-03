@@ -16,6 +16,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/siema": "^1.4.9",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"svelte": "^3.54.0",
@@ -30,6 +31,7 @@
 		"@tailwindcss/typography": "^0.5.9",
 		"daisyui": "^2.51.5",
 		"pdfjs": "^2.4.7",
+		"siema": "^1.5.1",
 		"yaml": "^2.2.2"
 	}
 }

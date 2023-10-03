@@ -1,8 +1,20 @@
 <script lang="ts">
 	import { downloadIcon, type ProductRequest } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Siema from 'siema';
 
 	export let data: ProductRequest | null;
+
+	let siema: Siema;
+	let siemaInterval: NodeJS.Timer;
+
+	function addImageElement(pictureLink: string, parentDiv: HTMLDivElement) {
+		const imgElem = document.createElement('img');
+		imgElem.src = pictureLink;
+		imgElem.alt = 'product';
+		imgElem.classList.add('rounded-lg', 'object-contain');
+		parentDiv.appendChild(imgElem);
+	}
 
 	function addTableRow(
 		tableBodyElem: HTMLElement,
@@ -119,7 +131,8 @@
 
 		const tutorialLinkElem = document.getElementById('tutorial-link') as HTMLAnchorElement;
 		const githubLinkElem = document.getElementById('github-link') as HTMLAnchorElement;
-		const productImageElem = document.getElementById('product-image') as HTMLImageElement;
+		const productImageElem = document.getElementById('product-image') as HTMLDivElement;
+		const productVideoElem = document.getElementById('product-video') as HTMLIFrameElement;
 
 		productContentElem.innerHTML = data.Product.Product;
 
@@ -160,9 +173,27 @@
 				githubLinkElem.classList.add('hidden');
 			}
 
-			if (data.ProductVersion.picture && data.ProductVersion.picture.length != 0) {
-				//set the src for the pic only if it exists, we will show a default picture otherwise
-				productImageElem.src = data.ProductVersion.picture;
+			if (data.ProductVersion.picture) {
+				//we have an image
+
+				if (Array.isArray(data.ProductVersion.picture)) {
+					//we have an array of images
+					data.ProductVersion.picture.forEach((pic) => {
+						addImageElement(pic, productImageElem);
+					});
+				} else {
+					//we have only one image as string
+					const imgSrc = data.ProductVersion.picture as string;
+					if (imgSrc.length != 0) {
+						addImageElement(imgSrc, productImageElem);
+					}
+				}
+			}
+
+			if (data.ProductVersion.video && data.ProductVersion.video.length != 0) {
+				productVideoElem.src = data.ProductVersion.video;
+			} else {
+				productVideoElem.classList.add('hidden');
 			}
 
 			if (data.ProductVersion.firmwares && data.ProductVersion.firmwares.length != 0) {
@@ -183,6 +214,24 @@
 				firmwareTable.classList.add('hidden');
 			}
 		}
+
+		siema = new Siema({ perPage: 1, loop: true });
+
+		function createSiemaInterval() {
+			siemaInterval = setInterval(() => {
+				siema.next();
+			}, 3000);
+		}
+        createSiemaInterval()
+
+		productImageElem.addEventListener('mouseenter', () => {
+			clearInterval(siemaInterval);
+		});
+        
+		productImageElem.addEventListener('mouseleave', () => {
+			createSiemaInterval();
+		});
+
 	});
 </script>
 

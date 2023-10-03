@@ -89,7 +89,7 @@ export const load = (async ({ fetch, params }) => {
         throw error(404, 'Product does not have a valid query string');
     }
 
-    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos']
+    const githubUserRepos = ['https://api.github.com/users/tomrodinger/repos', 'https://api.github.com/users/vladsomai/repos']
 
     const repos = await readAllRepositories(githubUserRepos, fetch)
     const productDataJson = await getAllAvailableProducts(repos, fetch)
@@ -100,7 +100,8 @@ export const load = (async ({ fetch, params }) => {
         version: "",
         type: "",
         web_page_template: "",
-        picture: "",
+        picture: [],
+        video:"#",
         description: "",
         schematic: "",
         user_manual: "",
@@ -108,7 +109,6 @@ export const load = (async ({ fetch, params }) => {
         github: "",
         firmwares: []
     }
-
     productDataJson.map((item: any) => {
         if (item.product == product?.Product) {
             item.versions.map((versionItem: ProductVersion) => {
@@ -119,6 +119,10 @@ export const load = (async ({ fetch, params }) => {
                         versionItem.firmwares.sort(
                             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
                         )
+                        if(versionItem.firmwares.length!=0)
+                        {
+                            versionItem.firmwares[0].date+=" (latest)"
+                        }
                     }
                 }
             })
@@ -130,7 +134,6 @@ export const load = (async ({ fetch, params }) => {
     }
 
     const reqHtmlPage = await fetch(productVersion.web_page_template);
-    // const reqHtmlPage = await fetch('http://localhost/default_template.html');
     const htmlPage = await reqHtmlPage.text()
 
     const reply: ProductRequest = { Product: product, ProductVersion: productVersion, HtmlPage: htmlPage }

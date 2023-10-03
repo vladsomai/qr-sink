@@ -11,12 +11,7 @@
 			</div>
 			<div class="dropdown md:dropdown-open dropdown-end md:dropdown-top md:top-9 mr-10 md:w-full">
 				<label tabindex="0" class="md:hidden btn btn-ghost rounded-btn"
-					><svg
-						viewBox="0 0 24 24"
-						height="30"
-						width="30"
-						xmlns="http://www.w3.org/2000/svg"
-					>
+					><svg viewBox="0 0 24 24" height="30" width="30" xmlns="http://www.w3.org/2000/svg">
 						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
 						<g id="SVGRepo_iconCarrier">
@@ -34,15 +29,12 @@
 						</g>
 					</svg>
 				</label>
-				<ul tabindex="0" class="menu dropdown-content h-auto w-52 bg-base-100 md:flex md:w-full md:flex-row md:justify-end p-2 items-center shadow md:shadow-none rounded-xl">
+				<ul
+					tabindex="0"
+					class="menu dropdown-content h-auto w-52 bg-base-100 md:flex md:w-full md:flex-row md:justify-end p-2 items-center shadow md:shadow-none rounded-xl"
+				>
 					<li class="">
-						<a
-							class="btn btn-ghost"
-							href="#"
-							id="tutorial-link"
-							target="_blank"
-							rel="noreferrer"
-						>
+						<a class="btn btn-ghost" href="#" id="tutorial-link" target="_blank" rel="noreferrer">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -59,13 +51,7 @@
 						</a>
 					</li>
 					<li>
-						<a
-							class="btn btn-ghost"
-							href="#"
-							id="github-link"
-							target="_blank"
-							rel="noreferrer"
-						>
+						<a class="btn btn-ghost" href="#" id="github-link" target="_blank" rel="noreferrer">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -105,19 +91,23 @@
 			</div>
 		</div>
 		<div class="flex flex-col w-full justify-center items-center md:flex-row">
-			<div class="w-[200px] md:w-[300px] flex justify-center items-center">
-				<img
-					src="/dummy-image-square.jpg"
-					alt="product"
-					class="rounded-lg object-contain"
-					id="product-image"
-				/>
-			</div>
+			<div id="product-image" class="w-[200px] md:w-[300px] siema"></div>
 			<div class="text-center mx-10 w-full md:w-4/12">
 				<p class="text-lg font-bold my-10 md:mt-0 md:mb-5" id="product-content"></p>
 				<p class="text-lg mb-5" id="description-content"></p>
 				<p class="text-lg mb-5" id="usage-content"></p>
 			</div>
+		</div>
+		<div class="w-full flex justify-center items-center mt-10">
+			<iframe
+				id="product-video"
+				src="#"
+				width="888"
+				height="500"
+				frameborder="0"
+				allow="autoplay; fullscreen; picture-in-picture"
+				allowfullscreen
+			></iframe>
 		</div>
 		<div class="w-full my-10" id="pdf-div">
 			<div class="w-full flex justify-around rounded-t-xl items-center bg-base-200">

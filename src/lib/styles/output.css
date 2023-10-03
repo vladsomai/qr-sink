@@ -1456,10 +1456,6 @@ html {
   border-bottom-right-radius: var(--rounded-btn, 0.5rem);
 }
 
-.absolute {
-  position: absolute;
-}
-
 .m-2 {
   margin: 0.5rem;
 }
@@ -1502,6 +1498,10 @@ html {
 
 .mr-10 {
   margin-right: 2.5rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
 }
 
 .flex {
