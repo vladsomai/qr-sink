@@ -55,63 +55,7 @@
 		tableBodyElem.appendChild(trElem);
 	}
 
-	let scale = 2.5;
-	let pdfDocument = null;
-	let pageNumber = 1;
-	let currentPage: any = null;
-	let canvas: HTMLCanvasElement;
-	let context: CanvasRenderingContext2D | null = null;
-
-	async function preparePdfEngine(url: string) {
-		if (!(data != null && data.Product != null)) return;
-
-		if (data.ProductVersion.schematic == '') return;
-
-		context = canvas.getContext('2d');
-
-		// Loaded via <script> tag, create shortcut to access PDF.js exports.
-		const pdfjsLib = window['pdfjs-dist/build/pdf' as any];
-
-		// The workerSrc property shall be specified.
-		//@ts-ignore
-		pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
-
-		// Asynchronous download of PDF
-		//@ts-ignore
-		const loadingTask = pdfjsLib.getDocument(url);
-		pdfDocument = await loadingTask.promise;
-		currentPage = await pdfDocument.getPage(pageNumber);
-		await render(scale);
-	}
-
-	let rendering = false;
-	async function render(scale: number) {
-		if (!currentPage || rendering) return;
-
-		rendering = true;
-		const viewport = await currentPage.getViewport({ scale: scale });
-		canvas.width = viewport.width;
-		canvas.height = viewport.height;
-
-		// Render PDF page into canvas context
-		const renderContext = {
-			canvasContext: context,
-			viewport: viewport
-		};
-
-		await currentPage.render(renderContext);
-		rendering = false;
-	}
-
-	async function handleZoomIn() {
-		scale += 0.1;
-		await render(scale);
-	}
-
-	async function handleZoomOut() {
-		scale -= 0.1;
-		await render(scale);
-	}
+	let pdfFrame: HTMLIFrameElement;
 
 	onMount(async () => {
 		if (!(data != null && data.Product != null)) return;
@@ -138,14 +82,11 @@
 
 		if (data.ProductVersion) {
 			if (data.ProductVersion.schematic && data.ProductVersion.schematic.length != 0) {
-				canvas = document.getElementById('pdfCanvas') as HTMLCanvasElement;
-				const zoomInBtn = document.getElementById('zoomInBtn');
-				const zoomOutBtn = document.getElementById('zoomOutBtn');
-				zoomInBtn?.addEventListener('click', handleZoomIn);
-				zoomOutBtn?.addEventListener('click', handleZoomOut);
+				pdfFrame = document.getElementById('pdfCanvas') as HTMLIFrameElement;
 
 				downloadSchematicLinkElem.href = data.ProductVersion.schematic;
-				preparePdfEngine(data.ProductVersion.schematic);
+				pdfFrame.src =
+					'https://docs.google.com/gview?url=' + data.ProductVersion.schematic + '&embedded=true';
 			} else {
 				const pdfDiv = document.getElementById('pdf-div') as HTMLDivElement;
 				pdfDiv.classList.add('hidden');
@@ -198,6 +139,7 @@
 
 			if (data.ProductVersion.firmwares && data.ProductVersion.firmwares.length != 0) {
 				const firmwareTableBody = document.getElementById('firmware-table-body') as HTMLElement;
+                console.log(firmwareTableBody)
 
 				data.ProductVersion.firmwares.map((firmware, index) => {
 					addTableRow(
