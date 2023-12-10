@@ -139,7 +139,6 @@
 
 			if (data.ProductVersion.firmwares && data.ProductVersion.firmwares.length != 0) {
 				const firmwareTableBody = document.getElementById('firmware-table-body') as HTMLElement;
-                console.log(firmwareTableBody)
 
 				data.ProductVersion.firmwares.map((firmware, index) => {
 					addTableRow(

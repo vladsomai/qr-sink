@@ -1492,8 +1492,8 @@ html {
   margin-left: 2.5rem;
 }
 
-.ml-3 {
-  margin-left: 0.75rem;
+.mr-1 {
+  margin-right: 0.25rem;
 }
 
 .mr-10 {
@@ -1502,10 +1502,6 @@ html {
 
 .mt-10 {
   margin-top: 2.5rem;
-}
-
-.mr-1 {
-  margin-right: 0.25rem;
 }
 
 .flex {
@@ -1520,24 +1516,12 @@ html {
   display: none;
 }
 
-.h-\[2000px\] {
-  height: 2000px;
-}
-
-.h-\[70vh\] {
-  height: 70vh;
+.h-\[50vh\] {
+  height: 50vh;
 }
 
 .h-auto {
   height: auto;
-}
-
-.h-\[500px\] {
-  height: 500px;
-}
-
-.h-\[50vh\] {
-  height: 50vh;
 }
 
 .w-52 {
@@ -1550,10 +1534,6 @@ html {
 
 .w-\[200px\] {
   width: 200px;
-}
-
-.w-\[500px\] {
-  width: 500px;
 }
 
 .w-full {
@@ -1634,31 +1614,6 @@ html {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-slate-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(148 163 184 / var(--tw-bg-opacity));
-}
-
-.bg-slate-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
-}
-
-.bg-slate-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
-}
-
-.bg-gray-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
-}
-
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
-
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -1670,16 +1625,6 @@ html {
 
 .p-5 {
   padding: 1.25rem;
-}
-
-.px-20 {
-  padding-left: 5rem;
-  padding-right: 5rem;
-}
-
-.px-\[20\%\] {
-  padding-left: 20%;
-  padding-right: 20%;
 }
 
 .px-\[0\%\] {
@@ -1828,21 +1773,6 @@ canvas {
     justify-content: flex-end;
   }
 
-  .md\:px-\[20\%\] {
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
-  .md\:px-\[10\%\] {
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-
-  .md\:px-\[5\%\] {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-
   .md\:pb-0 {
     padding-bottom: 0px;
   }
@@ -1855,11 +1785,6 @@ canvas {
 }
 
 @media (min-width: 1024px) {
-  .lg\:px-\[20\%\] {
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
   .lg\:px-\[15\%\] {
     padding-left: 15%;
     padding-right: 15%;
@@ -1870,11 +1795,5 @@ canvas {
   .xl\:px-\[20\%\] {
     padding-left: 20%;
     padding-right: 20%;
-  }
-}
-
-@media (min-width: 1536px) {
-  .\32xl\:w-8\/12 {
-    width: 66.666667%;
   }
 }

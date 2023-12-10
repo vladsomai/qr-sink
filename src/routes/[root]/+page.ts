@@ -133,7 +133,7 @@ export const load = (async ({ fetch, params }) => {
     }
 
     const reqHtmlPage = await fetch(productVersion.web_page_template);
-    // const reqHtmlPage = await fetch('http://192.168.1.18/default_template.html');
+    // const reqHtmlPage = await fetch('http://localhost:5173/default_template.html');
     const htmlPage = await reqHtmlPage.text()
 
     const reply: ProductRequest = { Product: product, ProductVersion: productVersion, HtmlPage: htmlPage }
