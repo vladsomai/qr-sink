@@ -14,8 +14,8 @@ function parseQueryString(inputStr: string): Product | null {
     const ProductArr = inputStr.split('_');
     if (ProductArr.length == 2 || ProductArr.length == 4) {
         return {
-            Product: ProductArr[0],
-            Version: ProductArr[1],
+            Product: ProductArr[0].toUpperCase(),
+            Version: ProductArr[1].toUpperCase(),
         };
     }
     return null;
@@ -84,7 +84,6 @@ async function readAllRepositories(githubUsers: string[], fetch: Function): Prom
 
 export const load = (async ({ fetch, params }) => {
     const product = parseQueryString(params.root);
-
     if (product == null) {
         throw error(404, 'Product does not have a valid query string');
     }
@@ -109,9 +108,9 @@ export const load = (async ({ fetch, params }) => {
         firmwares: []
     }
     productDataJson.map((item: any) => {
-        if (item.product == product?.Product) {
+        if (item.product.toUpperCase() == product?.Product.toUpperCase()) {
             item.versions.map((versionItem: ProductVersion) => {
-                if (versionItem.version == product.Version) {
+                if (versionItem.version.toUpperCase() == product.Version.toUpperCase()) {
                     found = true
                     productVersion = versionItem
                     if (versionItem.firmwares) {

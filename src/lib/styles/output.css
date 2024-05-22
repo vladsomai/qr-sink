@@ -816,6 +816,11 @@ html {
   padding-bottom: 0.5rem;
 }
 
+.link {
+  cursor: pointer;
+  text-decoration-line: underline;
+}
+
 .menu {
   display: flex;
   flex-direction: column;
@@ -1086,6 +1091,16 @@ html {
 .label a:hover {
   --tw-text-opacity: 1;
   color: hsl(var(--bc) / var(--tw-text-opacity));
+}
+
+.link:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .menu.horizontal > li.bordered > a,
@@ -1504,6 +1519,10 @@ html {
   margin-top: 2.5rem;
 }
 
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
 .flex {
   display: flex;
 }
@@ -1538,6 +1557,10 @@ html {
 
 .w-full {
   width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .flex-col {

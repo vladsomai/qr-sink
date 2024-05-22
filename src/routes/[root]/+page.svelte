@@ -2,6 +2,10 @@
 	import { downloadIcon, type ProductRequest } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Siema from 'siema';
+	//@ts-ignore
+	import * as pdfjsLib from 'pdfjs-dist/build/pdf.min.mjs';
+	//@ts-ignore
+	import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs';
 
 	export let data: ProductRequest | null;
 
@@ -55,10 +59,107 @@
 		tableBodyElem.appendChild(trElem);
 	}
 
-	let pdfFrame: HTMLIFrameElement;
+	let scale = 1;
+	let pdfDocument = null;
+	let pageNumber = 1;
+	let currentPage: any = null;
+	let canvas: HTMLCanvasElement;
+	let parentCanvas: HTMLDivElement;
+	let context: CanvasRenderingContext2D | null = null;
+
+	async function preparePdfEngine(url: string) {
+		if (!(data != null && data.Product != null)) return;
+		if (data.ProductVersion.schematic == '') return;
+		context = canvas.getContext('2d');
+		const loadingTask = pdfjsLib.getDocument(url);
+		pdfDocument = await loadingTask.promise;
+		currentPage = await pdfDocument.getPage(pageNumber);
+		await render(scale);
+	}
+
+	let rendering = false;
+
+	async function render(scale: number) {
+		if (rendering) {
+			return;
+		}
+
+		if (!currentPage) {
+			return;
+		}
+		rendering = true;
+		const viewport = await currentPage.getViewport({ scale: scale });
+		canvas.width = viewport.width;
+		canvas.height = viewport.height;
+		// Render PDF page into canvas context
+		const renderContext = {
+			canvasContext: context,
+			viewport: viewport
+		};
+		const res = await currentPage.render(renderContext);
+		res.promise = res.promise
+			.then(() => {})
+			.catch((err: any) => console.log(err))
+			.finally(() => {
+				rendering = false;
+			});
+	}
+
+	async function handleZoomIn() {
+		scale += 0.1;
+		await render(scale);
+	}
+	async function handleZoomOut() {
+		scale -= 0.1;
+		await render(scale);
+	}
+
+	let lastX = 0;
+	let lastY = 0;
+	function pan(e: MouseEvent) {
+		if (!mouseDown) return;
+
+		if (lastX > e.clientX) {
+			parentCanvas.scrollBy(5, 0);
+		}
+
+		if (lastX < e.clientX) {
+			parentCanvas.scrollBy(-5, 0);
+		}
+
+		if (lastY > e.clientY) {
+			parentCanvas.scrollBy(0, 5);
+		}
+
+		if (lastY < e.clientY) {
+			parentCanvas.scrollBy(0, -5);
+		}
+		lastX = e.clientX;
+		lastY = e.clientY;
+	}
+
+	function scalePdf(e: WheelEvent) {
+		e.preventDefault();
+		if (!e.ctrlKey) return;
+
+		if (e.deltaY < 0) {
+			handleZoomIn();
+		} else {
+			handleZoomOut();
+		}
+	}
+
+	let mouseDown = 0;
 
 	onMount(async () => {
 		if (!(data != null && data.Product != null)) return;
+
+		document.body.onmousedown = function () {
+			++mouseDown;
+		};
+		document.body.onmouseup = function () {
+			--mouseDown;
+		};
 
 		const productContentElem = document.getElementById('product-content') as HTMLParagraphElement;
 		const descriptionContentElem = document.getElementById(
@@ -82,11 +183,26 @@
 
 		if (data.ProductVersion) {
 			if (data.ProductVersion.schematic && data.ProductVersion.schematic.length != 0) {
-				pdfFrame = document.getElementById('pdfCanvas') as HTMLIFrameElement;
+				canvas = document.getElementById('pdfCanvas') as HTMLCanvasElement;
+				parentCanvas = document.getElementById('parentPdfCanvas') as HTMLDivElement;
+
+				parentCanvas.addEventListener('mouseenter', () => {
+					parentCanvas.addEventListener('mousemove', pan);
+					parentCanvas.addEventListener('wheel', scalePdf);
+				});
+
+				parentCanvas.addEventListener('mouseleave', () => {
+					parentCanvas.removeEventListener('mousemove', pan);
+					parentCanvas.removeEventListener('wheel', scalePdf);
+				});
+
+				const zoomInBtn = document.getElementById('zoomInBtn');
+				const zoomOutBtn = document.getElementById('zoomOutBtn');
+				zoomInBtn?.addEventListener('click', handleZoomIn);
+				zoomOutBtn?.addEventListener('click', handleZoomOut);
 
 				downloadSchematicLinkElem.href = data.ProductVersion.schematic;
-				pdfFrame.src =
-					'https://docs.google.com/gview?url=' + data.ProductVersion.schematic + '&embedded=true';
+				preparePdfEngine(data.ProductVersion.schematic);
 			} else {
 				const pdfDiv = document.getElementById('pdf-div') as HTMLDivElement;
 				pdfDiv.classList.add('hidden');

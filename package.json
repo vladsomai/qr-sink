@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.9",
 		"daisyui": "^2.51.5",
+		"pdfjs-dist": "^4.2.67",
 		"siema": "^1.5.1",
 		"yaml": "^2.2.2"
 	}
