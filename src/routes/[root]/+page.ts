@@ -70,9 +70,13 @@ async function readAllRepositories(githubUsers: string[], fetch: Function): Prom
     const promises = githubUsers.map(async (githubUserRepos: any) => {
         try {
             const reqAllUserRepos = await fetch(githubUserRepos)
+                .catch((err: any) => {
+                    console.log("Fetch rejected", err)
+                })
             const _allRepos = await reqAllUserRepos.json();
             repos = [...repos, ..._allRepos]
         } catch (err) {
+            console.log("Could not read all repositories.", err)
 
         }
     })
@@ -99,7 +103,7 @@ export const load = (async ({ fetch, params }) => {
         type: "",
         web_page_template: "",
         picture: [],
-        video:"#",
+        video: "#",
         description: "",
         schematic: "",
         user_manual: "",
@@ -107,19 +111,25 @@ export const load = (async ({ fetch, params }) => {
         github: "",
         firmwares: []
     }
+
+    const foundProducts:string[] = []
     productDataJson.map((item: any) => {
-        if (item.product.toUpperCase() == product?.Product.toUpperCase()) {
+        const productCode = item.product.toString();
+        item.versions.map((versionItem: ProductVersion)=>{
+            foundProducts.push(`${productCode}_${versionItem.version.toString()}`)
+        })
+
+        if (item.product.toString().toUpperCase() == product?.Product.toString().toUpperCase()) {
             item.versions.map((versionItem: ProductVersion) => {
-                if (versionItem.version.toUpperCase() == product.Version.toUpperCase()) {
+                if (versionItem.version.toString().toUpperCase() == product.Version.toString().toUpperCase()) {
                     found = true
                     productVersion = versionItem
                     if (versionItem.firmwares) {
                         versionItem.firmwares.sort(
                             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
                         )
-                        if(versionItem.firmwares.length!=0)
-                        {
-                            versionItem.firmwares[0].date+=" (latest)"
+                        if (versionItem.firmwares.length != 0) {
+                            versionItem.firmwares[0].date += " (latest)"
                         }
                     }
                 }
@@ -127,7 +137,10 @@ export const load = (async ({ fetch, params }) => {
         }
     })
 
+
     if (!found) {
+        console.log(`Product ${product.Product}_${product.Version} was not found. Available products: ${foundProducts}`)
+
         throw error(404, 'Product not found');
     }
 
@@ -136,6 +149,7 @@ export const load = (async ({ fetch, params }) => {
     const htmlPage = await reqHtmlPage.text()
 
     const reply: ProductRequest = { Product: product, ProductVersion: productVersion, HtmlPage: htmlPage }
+
     return reply
 
 }) satisfies PageLoad;

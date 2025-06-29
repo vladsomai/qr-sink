@@ -72,9 +72,15 @@
 		if (data.ProductVersion.schematic == '') return;
 		context = canvas.getContext('2d');
 		const loadingTask = pdfjsLib.getDocument(url);
-		pdfDocument = await loadingTask.promise;
-		currentPage = await pdfDocument.getPage(pageNumber);
-		await render(scale);
+		pdfDocument = await loadingTask.promise.catch((ex: any) => {
+			console.log('loadingTask.promise threw: ', ex);
+		});
+		currentPage = await pdfDocument.getPage(pageNumber).catch((ex: any) => {
+			console.log('getPage threw: ', ex);
+		});
+		await render(scale).catch((ex: any) => {
+			console.log('render promise threw: ', ex);
+		});
 	}
 
 	let rendering = false;
@@ -97,7 +103,7 @@
 			viewport: viewport
 		};
 		const res = await currentPage.render(renderContext);
-		res.promise = res.promise
+		res.promise
 			.then(() => {})
 			.catch((err: any) => console.log(err))
 			.finally(() => {
@@ -250,6 +256,7 @@
 			if (data.ProductVersion.video && data.ProductVersion.video.length != 0) {
 				productVideoElem.src = data.ProductVersion.video;
 			} else {
+				productVideoElem.parentElement?.classList.add('hidden')
 				productVideoElem.classList.add('hidden');
 			}
 
