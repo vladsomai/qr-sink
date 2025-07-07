@@ -69,7 +69,7 @@
 
 	async function preparePdfEngine(url: string) {
 		if (!(data != null && data.Product != null)) return;
-		if (data.ProductVersion.schematic == '') return;
+		if (data.Version.schematic == '') return;
 		context = canvas.getContext('2d');
 		const loadingTask = pdfjsLib.getDocument(url);
 		pdfDocument = await loadingTask.promise.catch((ex: any) => {
@@ -185,10 +185,10 @@
 		const productImageElem = document.getElementById('product-image') as HTMLDivElement;
 		const productVideoElem = document.getElementById('product-video') as HTMLIFrameElement;
 
-		productContentElem.innerHTML = data.Product.Product;
+		productContentElem.innerHTML = data.Product;
 
-		if (data.ProductVersion) {
-			if (data.ProductVersion.schematic && data.ProductVersion.schematic.length != 0) {
+		if (data.Version) {
+			if (data.Version.schematic && data.Version.schematic.length != 0) {
 				canvas = document.getElementById('pdfCanvas') as HTMLCanvasElement;
 				parentCanvas = document.getElementById('parentPdfCanvas') as HTMLDivElement;
 
@@ -207,63 +207,63 @@
 				zoomInBtn?.addEventListener('click', handleZoomIn);
 				zoomOutBtn?.addEventListener('click', handleZoomOut);
 
-				downloadSchematicLinkElem.href = data.ProductVersion.schematic;
-				preparePdfEngine(data.ProductVersion.schematic);
+				downloadSchematicLinkElem.href = data.Version.schematic;
+				preparePdfEngine(data.Version.schematic);
 			} else {
 				const pdfDiv = document.getElementById('pdf-div') as HTMLDivElement;
 				pdfDiv.classList.add('hidden');
 			}
 
-			descriptionContentElem.innerHTML = data.ProductVersion.description;
+			descriptionContentElem.innerHTML = data.Version.description;
 
 			usageContentElem.innerHTML = ''; //currently not used
 
-			if (data.ProductVersion.user_manual && data.ProductVersion.user_manual.length != 0) {
-				downloadUserManualLinkElem.href = data.ProductVersion.user_manual;
+			if (data.Version.user_manual && data.Version.user_manual.length != 0) {
+				downloadUserManualLinkElem.href = data.Version.user_manual;
 			} else {
 				downloadUserManualLinkElem.classList.add('hidden');
 			}
 
-			if (data.ProductVersion.tutorial && data.ProductVersion.tutorial.length != 0) {
-				tutorialLinkElem.href = data.ProductVersion.tutorial;
+			if (data.Version.tutorial && data.Version.tutorial.length != 0) {
+				tutorialLinkElem.href = data.Version.tutorial;
 			} else {
 				tutorialLinkElem.classList.add('hidden');
 			}
 
-			if (data.ProductVersion.github && data.ProductVersion.github.length != 0) {
-				githubLinkElem.href = data.ProductVersion.github;
+			if (data.Version.github && data.Version.github.length != 0) {
+				githubLinkElem.href = data.Version.github;
 			} else {
 				githubLinkElem.classList.add('hidden');
 			}
 
-			if (data.ProductVersion.picture) {
+			if (data.Version.picture) {
 				//we have an image
 
-				if (Array.isArray(data.ProductVersion.picture)) {
+				if (Array.isArray(data.Version.picture)) {
 					//we have an array of images
-					data.ProductVersion.picture.forEach((pic) => {
+					data.Version.picture.forEach((pic) => {
 						addImageElement(pic, productImageElem);
 					});
 				} else {
 					//we have only one image as string
-					const imgSrc = data.ProductVersion.picture as string;
+					const imgSrc = data.Version.picture as string;
 					if (imgSrc.length != 0) {
 						addImageElement(imgSrc, productImageElem);
 					}
 				}
 			}
 
-			if (data.ProductVersion.video && data.ProductVersion.video.length != 0) {
-				productVideoElem.src = data.ProductVersion.video;
+			if (data.Version.video && data.Version.video.length != 0) {
+				productVideoElem.src = data.Version.video;
 			} else {
 				productVideoElem.parentElement?.classList.add('hidden')
 				productVideoElem.classList.add('hidden');
 			}
 
-			if (data.ProductVersion.firmwares && data.ProductVersion.firmwares.length != 0) {
+			if (data.Version.firmwares && data.Version.firmwares.length != 0) {
 				const firmwareTableBody = document.getElementById('firmware-table-body') as HTMLElement;
 
-				data.ProductVersion.firmwares.map((firmware, index) => {
+				data.Version.firmwares.map((firmware, index) => {
 					addTableRow(
 						firmwareTableBody,
 						firmware.version,

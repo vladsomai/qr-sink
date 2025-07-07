@@ -1,37 +1,47 @@
-export interface Product {
-    Product: string;
-    Version: string;
+export enum CacheType { Repos, Products }
+
+export interface RepoType {
+    full_name: string
 }
 
 export interface ProductRequest {
-    Product: Product | null,
-    ProductVersion: ProductVersion
+    Product: string,
+    Version: VersionType,
     HtmlPage: string
 }
 
-export interface Firmware {
-    "version": string
-    "compatibility": number,
-    "date": string,
-    "description": string,
-    "url": string,
-    "sha256": string
+export interface Product {
+    ProductCode: string,
+    VersionCode: string
 }
 
-export interface ProductVersion {
+export interface FirmwareType {
+    version: string,
+    compatibility: string,
+    date: string,
+    description: string
+    url: string,
+    sha256: string
+}
+
+export interface VersionType {
     version: string,
     type: string,
     web_page_template: string,
-    picture: string[],
     video: string,
+    picture: string[],
     description: string,
     schematic: string,
     user_manual: string,
     tutorial: string,
-    github: string,
-    firmwares: Firmware[]
+    github: string
+    firmwares: FirmwareType[]
 }
 
+export interface ProductType {
+    product: string,
+    versions: VersionType[]
+}
 
 export const downloadIcon = `		<svg
 xmlns="http://www.w3.org/2000/svg"
